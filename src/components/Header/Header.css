@@ -1,0 +1,16 @@
+.header {
+    position: fixed;
+    top: 0;
+    height: 30px;
+    background-color: crimson;
+    left: 0;
+    right: 0;
+    vertical-align: middle;
+    font-weight: 400;
+    font-size: 22px;
+    color: #ffffff;
+    padding: 20px;
+    z-index: 5;
+    min-height: 30px;
+
+}
