@@ -12,12 +12,11 @@ class Search extends Component {
     }
 
     doSearch =() => {
+        
+        this.props.callback(this.state.value);
 
-        const {value} = this.state.value;
-
-        if(value !== '' || value !== null) {
-            this.props.callback(value);
-        }
+        // if(value !== '' || value !== null) {
+        // }
 
     }
 

@@ -11,13 +11,13 @@ const QueryResult = (props) => {
             :
 
     <div className="item" style={{width: "unset"}}>
-            <h3>Search Result</h3>
+            <h3>{props.count} Result Found</h3>
     <ul>
         {
         props.result.map( (item) => {
             return (<li key={item.id}>{item.value}
             
-                <img src="{item.icon_url}" alt="{item.id}" />
+                <img src="{item.icon_url}" alt="" />
 
                 {
                     item.categories.length > 0 ?

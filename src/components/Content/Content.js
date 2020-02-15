@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import './Content.css';
 import Search from '../Search/Search';
 import QueryResult from '../QueryResult/QueryResult';
-import API from '../../api/jokeApi';
+import BASE_URL from '../../api/jokeApi';
 
 class Content extends Component {
 
@@ -14,49 +14,51 @@ class Content extends Component {
         search: false,
     }
 
+    componentDidMount() {
+        this.getCategories('categories');
+    }
+
     categoryHandler(item) {
-        let data = API.getRandomJoke(item);
-        this.setState({
-            joke: true,
-            randomJoke: data.value
-        });
+        this.getRandomJoke(item)
+
     }
 
     searchQuery = (query) => {
-     
-        let data = API.getSearchQuery(query);
-        this.setState({
-            search: true,
-            queryItems: data.result
-        });
-
-
-
+        if(query.length > 0) {
+            this.getSearchQuery(query);
+        }
     }
 
-    getCategory = ()=> {
-        let data = API.getCategories('categories');
-        this.setState({
-            category: data
-        });
-    }
-
-    componentDidMount() {
-        this.getCategory();
-    }
-
-    // fetchItem = (api) => {
-    //     fetch(api).then(result => result.json()).
-    //     then(result => {
-    //         //
-    //         this.setState({
-    //         })
-    //     }).catch(error => console.log(error));
-    // }
+    // fetching endpoint
+    getCategories = (endpoint) => {
+        fetch(BASE_URL + endpoint).then(res => res.json()).then(result => {
+           this.setState({category: result});
+       }).catch(error => console.log(error));
+   }
+   
+   getRandomJoke =(category) => {
+       let randomCategory = BASE_URL + `random?category=${category}`;
+           fetch(randomCategory).then(res => res.json()).then(result => {
+            this.setState({
+                joke: true,
+                randomJoke: result.value
+            })
+        }).catch(err => err);
+   }
+   
+   getSearchQuery =(query) => {
+       let searchUrl = BASE_URL + `search?query=${query}`;
+       fetch(searchUrl).then(res => res.json())
+           .then(result => {
+            this.setState({
+                search: true,
+                queryItems: result.result,
+                resultTotal: result.total
+            });
+           }).catch(err => err);
+   }
 
     render() {
-
-        console.log(this.state.queryItems);
 
         return(
             <div className="main">
@@ -98,7 +100,7 @@ class Content extends Component {
                 </div>
 
                     :
-                    <QueryResult result={this.state.queryItems}></QueryResult>
+                    <QueryResult count={this.state.resultTotal} result={this.state.queryItems}></QueryResult>
 
                 }
 
@@ -108,9 +110,6 @@ class Content extends Component {
                     :
                     null
                 }
-
-                
-            
 
             </div>
         );
